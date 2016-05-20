@@ -35,6 +35,28 @@ class Individual(object):
     def Dissimilarity(self,other):
         import numpy as np
         return np.linalg.norm(self.Chromosome-other.Chromosome)
+        
+        
+    def contribution_diversity(self,index_cmin,Population,PopSize,case):
+        import numpy as np
+        
+        if case=="Regualr":
+            cd=np.empty(shape=[1, PopSize]) 
+            for i in range(0,PopSize):#1
+                #print(i)
+                cd[0,i]=self.Dissimilarity(Population[i])
+                
+                #cd[0,index_of_self]=np.inf
+            #cd[0,PopSize]=np.inf
+            
+        if case=="cmin-removed": 
+            cd=np.empty(shape=[1, PopSize-1]) 
+            pop_cmin_removed=Population[:]  #deep copy
+            #print(int(index_cmin))
+            del pop_cmin_removed[int(index_cmin)]
+            for i in range(0,PopSize-1):
+                cd[0,i]=self.Dissimilarity(pop_cmin_removed[i])           
+        return np.min(cd)
     
     
     def __str__(self):
